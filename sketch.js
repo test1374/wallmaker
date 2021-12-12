@@ -59,7 +59,8 @@ function preload() {
   brick3 = loadImage("brick3.png");
 }
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(windowWidth, windowHeight);
+  blockSize = (width + height) / 40;
 }
 function draw() {
   background('#80AF49');
