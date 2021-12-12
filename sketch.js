@@ -60,7 +60,7 @@ function preload() {
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  blockSize = (width + height) / 40;
+  blockSize = (width + height) / 50;
 }
 function draw() {
   background('#80AF49');
