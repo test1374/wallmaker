@@ -61,7 +61,7 @@ function preload() {
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  blockSize = (width + height) / 50;
+  blockSize = (width + height) / 90;
   backgroundcolour = '#80AF49';
   tool = 'wall';
 }
