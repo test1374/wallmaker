@@ -1,53 +1,52 @@
-let blockSize = 19, wall1, wall2, wall3, wall4, brick1, brick2, brick3,
+let blockSize = 19, wallcolour, floortexture, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, backgroundcolour,  
 walls = [
-  "----------------------------",
-  "----------------------------",
-  "--wwwww-wwwww---------------",
-  "--w---------wwwwwwwwwwwww---",
-  "--w---------w-----------w---",
-  "--wwwwwww-www-----------w---",
-  "---w--------w---------------",
-  "---w--------------------w---",
-  "---w--------w-----------w---",
-  "---ww-wwwwwwwwwwwwww-wwww---",
-  "---w-----w--------------w---",
-  "------------------------w---",
-  "---w-----w--------------w---",
-  "---w-----wwwwwwwwwww-wwww---",
-  "---www-www--------------w---",
-  "---w-----w---w----------w---",
-  "---w-----wwwww----------w---",
-  "---w-----w-------wwww-www---",
-  "---w-------------w------w---",
-  "---w-----w-------w------w---",
-  "---wwwwwwwwwwww-wwwwwwwww---",
-  "----------------------------",
-  "----------------------------",
-],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],],
 floors = [
-  "wwwwwwwwwwwwwwwwwwwwwwwwwwww",
-  "w--------------------------w",
-  "w-ffffffffff---------------w",
-  "w-fffffffffffffffffffffff--w",
-  "w-fffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--ffffffffffffffffffffff--w",
-  "w--------------------------w",
-  "wwwwwwwwwwwwwwwwwwwwwwwwwwww",
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 function preload() {
   wall1 = loadImage("wall1.png");
@@ -55,79 +54,91 @@ function preload() {
   wall3 = loadImage("wall3.png");
   wall4 = loadImage("wall4.png");
   brick1 = loadImage("brick1.png");
-  brick2 = loadImage("brick2.png");
-  brick3 = loadImage("brick3.png");
+  bank = loadImage('pattern-bank.png');
+  barn = loadImage('pattern-barn.png');
+  house = loadImage('pattern-house.png');
+  mansion = loadImage('pattern-mansion.png');
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  blockSize = (width + height) / 70;
+  blockSize = (width + height) / 50;
+  backgroundcolour = '#80AF49';
+  tool = 'wall';
 }
 function draw() {
-  background('#80AF49');
-  //background(0, 0, 0);
+  cursor('crosshair');
+  background(backgroundcolour);
+  //background(20);
+  stroke(0);
+  for(var h = 0; h < width / blockSize * 4; h++) {
+    line(0, h * blockSize * 4, width, h * blockSize * 4)
+  }
+  for(var j = 0; j < height / blockSize * 4; j++) {
+      line(j * blockSize * 4, 0, j * blockSize * 4, height);
+  }
   imageMode(CENTER);
   angleMode(DEGREES);
   noTint();
   noFill();
   for(var i = 0; i < floors.length; i++) {
     for(var b = 0; b < floors[i].length; b++) {
-      if(floors[i][b] !== 'w') {
+      if(floors[i][b] === 2) {
         var l = false, r = false, a = false, u = false;
-        if(floors[i][b - 1] === "f") {
+        if(floors[i][b - 1] === 2) {
           l = true;
         }
-        if(floors[i][b + 1] === "f") {
+        if(floors[i][b + 1] === 2) {
           r = true;
         }
-        if(floors[i+1][b] === "f") {
+        if(floors[i+1][b] === 2) {
           u = true;
         }
-        if(floors[i-1][b] === "f") {
+        if(floors[i-1][b] === 2) {
           a = true;
         }
         translate(b * blockSize + blockSize / 2, i * blockSize + blockSize / 2);
-        if(r === true && l === true && a === true && u === true) {
+        if(r === true && l === true && a === true && u === true && floors[i - 1][b + 1] !== 0 && floors[i + 1][b + 1] !== 0 && floors[i - 1][b - 1] !== 0 && floors[i + 1][b - 1] !== 0) {
           image(brick1, 0, 0, blockSize, blockSize);
         }
+        if(r === true && l === true && a === true && u === true && floors[i - 1][b + 1] === 0 && floors[i + 1][b + 1] !== 0 && floors[i - 1][b - 1] !== 0 && floors[i + 1][b - 1] !== 0) {
+          image(brick1.get(0, 0, brick1.width / 2, brick1.height), -blockSize / 4, 0, blockSize / 2, blockSize);
+          image(brick1.get(brick1.width / 2, brick1.height / 2, brick1.width / 2, brick1.height / 2), blockSize / 4, blockSize / 4, blockSize / 2, blockSize / 2);
+        }
+        if(r === true && l === true && a === true && u === true && floors[i - 1][b + 1] !== 0 && floors[i + 1][b + 1] !== 0 && floors[i - 1][b - 1] === 0 && floors[i + 1][b - 1] !== 0) {
+          image(brick1.get(brick1.width / 2, 0, brick1.width / 2, brick1.height), blockSize / 4, 0, blockSize / 2, blockSize);
+          image(brick1.get(0, brick1.height / 2, brick1.width / 2, brick1.height / 2), -blockSize / 4, blockSize / 4, blockSize / 2, blockSize / 2);
+        }
+        if(r === true && l === true && a === true && u === true && floors[i - 1][b + 1] !== 0 && floors[i + 1][b + 1] !== 0 && floors[i - 1][b - 1] !== 0 && floors[i + 1][b - 1] === 0) {
+          image(brick1.get(0, 0, brick1.width / 2, brick1.height / 2), -blockSize / 4, -blockSize / 4, blockSize / 2, blockSize / 2);
+          image(brick1.get(brick1.width / 2, 0, brick1.width / 2, brick1.height), blockSize / 4, 0, blockSize / 2, blockSize);
+        }
+        if(r === true && l === true && a === true && u === true && floors[i - 1][b + 1] !== 0 && floors[i + 1][b + 1] === 0 && floors[i - 1][b - 1] !== 0 && floors[i + 1][b - 1] !== 0) {
+          image(brick1.get(0, 0, brick1.width / 2, brick1.height), -blockSize / 4, 0, blockSize / 2, blockSize);
+          image(brick1.get(brick1.width / 2, 0, brick1.width / 2, brick1.height / 2), blockSize / 4, -blockSize / 4, blockSize / 2, blockSize / 2);
+        }
         if(r === true && l === true && a === true && u === false) {
-          rotate(270);
-          image(brick2, 0, 0, blockSize, blockSize);
-          rotate(-270);
+          image(brick1.get(0, 0, brick1.width, brick1.height / 2), 0, -blockSize / 4, blockSize, blockSize / 2);
         }
         if(r === true && l === true && a === false && u === true) {
-          rotate(90);
-          image(brick2, 0, 0, blockSize, blockSize);
-          rotate(-90);
+          image(brick1.get(0, brick1.height / 2, brick1.width, brick1.height / 2), 0, blockSize / 4, blockSize, blockSize / 1.99);
         }
         if(r === true && l === false && a === true && u === true) {
-          image(brick2, 0, 0, blockSize, blockSize);
+          image(brick1.get(brick1.width / 2, 0, brick1.width / 2, brick1.height), blockSize / 4, 0, blockSize / 2, blockSize);
         }
         if(r === false && l === true && a === true && u === true) {
-          rotate(180);
-          image(brick2, 0, 0, blockSize, blockSize);
-          rotate(-180);
+          image(brick1.get(0, 0, brick1.width / 2, brick1.height), -blockSize / 4, 0, blockSize / 2, blockSize);
         }
         if(r === false && l === true && a === true && u === false) {
-          rotate(180);
-          image(brick3, 0, 0, blockSize, blockSize);
-          rotate(-180);
+          image(brick1.get(brick1.width / 2, brick1.height / 2, brick1.width / 2, brick1.height / 2), -blockSize / 4, -blockSize / 4, blockSize / 2, blockSize / 2);
         }
         if(r === true && l === false && u === true && a === false) {
-          image(brick3, 0, 0, blockSize, blockSize);
+          image(brick1.get(0, 0, brick1.width / 2, brick1.height / 2), blockSize / 4, blockSize / 4, blockSize / 2, blockSize / 2);
         }
         if(r === false && l === true && u === true && a === false) {
-          rotate(90);
-          image(brick3, 0, 0, blockSize, blockSize);
-          image(brick3, 0, blockSize / 2, blockSize, blockSize);
-          image(brick3, blockSize / 2, 0, blockSize, blockSize);
-          rotate(-90);
+          image(brick1.get(brick1.width / 2, 0, brick1.width / 2, brick1.height / 2), -blockSize / 4, blockSize / 4, blockSize / 2, blockSize / 2);
         }
         if(r === true && l === false && a === true && u === false) {
-          rotate(270);
-          image(brick3, 0, 0, blockSize, blockSize);
-          image(brick3, 0, blockSize / 2, blockSize, blockSize);
-          image(brick3, blockSize / 2, 0, blockSize, blockSize);
-          rotate(-270);
+          image(brick1.get(0, brick1.height / 2, brick1.width / 2, brick1.height / 2), blockSize / 4 , -blockSize / 4, blockSize / 2, blockSize / 2);
         }
         translate(-(b * blockSize + blockSize / 2), -(i * blockSize + blockSize / 2));
       }
@@ -135,18 +146,24 @@ function draw() {
   }
   for(var y = 0; y < walls.length; y++) {
     for(var x = 0; x < walls[y].length; x++) {
-      if(walls[y][x] !== '-') {
+      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT) {
+        walls[y][x] = 2;
+      }
+      if(walls[y][x] === 2) {
+        if(floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === LEFT) {
+        walls[y][x] = 0;
+      }
         var left = false, right = false, above = false, under = false;
-        if(walls[y][x - 1] === "w") {
+        if(walls[y][x - 1] === 2) {
           left = true;
         }
-        if(walls[y][x + 1] === "w") {
+        if(walls[y][x + 1] === 2) {
           right = true;
         }
-        if(walls[y+1][x] === "w") {
+        if(walls[y+1][x] === 2) {
           under = true;
         }
-        if(walls[y-1][x] === "w") {
+        if(walls[y-1][x] === 2) {
           above = true;
         }
         translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
@@ -198,8 +215,14 @@ function draw() {
           image(wall3, 0, 0, blockSize, blockSize);
           rotate(-180);
         }
+        if(above === false && under === false && right === false && left === false) {
+          image(wall1, 0, 0, blockSize, blockSize);
+        }
         translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
       }
     }
   }
+  stroke(0);
+  rect(floor(mouseX / blockSize) * blockSize, floor(mouseY / blockSize) * blockSize, blockSize, blockSize);
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
 }
