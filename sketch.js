@@ -245,6 +245,7 @@ function draw() {
       }
     }
   }
+  noTint();
   stroke(0);
   if(tool === 'wall' && menu == false) {
     rect(floor(mouseX / blockSize) * blockSize, floor(mouseY / blockSize) * blockSize, blockSize, blockSize);
