@@ -68,6 +68,7 @@ function setup() {
   backgroundcolour = '#80AF49';
   tool = 'floor';
   floortexture = bunker1;
+  wallcolour = '#ffffff';
 }
 keyReleased = function() {
   if(key == 'm' && menu == false && menutimer > 0) {
@@ -190,7 +191,7 @@ function draw() {
           above = true;
         }
         translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
-        tint(100);
+        tint(wallcolour);
         if(above === true && under === true && left === true && right === true) {
           image(wall4, 0, 0, blockSize, blockSize);
         }
@@ -365,6 +366,110 @@ function draw() {
         rect(width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
         if(mouseIsPressed) {
           floortexture = brick1;
+        }
+      }
+    }
+    if(tab == 'wall') {
+      textSize(20);
+      text("Wall Colours", width / 2, blockSize * 6);
+      tint('#a18168');
+      image(wall1, width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#775529');
+      image(wall1, width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#a3977d');
+      image(wall1, width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#6d7645');
+      image(wall1, width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#233742');
+      image(wall1, width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#6c6c6b');
+      image(wall1, width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
+      tint('#814100');
+      image(wall1, width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
+      tint('#42060b');
+      image(wall1, width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
+      noTint();
+      image(wall1, width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
+      rectMode(CENTER);
+      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#a18168';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#775529';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#a3977d';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 && mouseX <= width / 2 + blockSize * 4 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#6d7645';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 + blockSize * 4 && mouseX <= width / 2 + blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#233742';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 + blockSize * 8 && mouseX <= width / 2 + blockSize * 12 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#6c6c6b';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#814100';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#42060b';
+          tool = 'wall';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          wallcolour = '#ffffff';
+          tool = 'wall';
         }
       }
     }
