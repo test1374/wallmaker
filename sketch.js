@@ -121,8 +121,16 @@ function draw() {
           case brick1:
             floors[i][b] = 8;
           break;
+          case "concrete":
+            floors[i][b] = 9;
+          break;
+          case "lconcrete":
+            floors[i][b] = 10;
+          break;
         }
       }
+    noStroke();
+      rectMode(CENTER);
       if(floors[i][b] !== 0 && floors[i][b] !== 1) {
         if(mouseIsPressed && floor(mouseX / blockSize) === b && floor(mouseY / blockSize) === i && mouseButton === LEFT && tool === 'floor' && menu == false) {
         floors[i][b] = 0;
@@ -163,11 +171,21 @@ function draw() {
           case 8:
             image(brick1, 0, 0, blockSize, blockSize);
           break;
+          case 9:
+            fill(89, 89, 89);
+            rect(0, 0, blockSize, blockSize);
+          break;
+          case 10:
+            fill(100, 100, 100);
+            rect(0, 0, blockSize, blockSize);
+          break;
         }
         translate(-(b * blockSize + blockSize), -(i * blockSize + blockSize));
       }
     }
   }
+noFill();
+rectMode(CORNER);
   for(var y = 0; y < walls.length; y++) {
     for(var x = 0; x < walls[y].length; x++) {
       if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false) {
@@ -311,7 +329,13 @@ function draw() {
       image(bunker1, width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
       image(bunker2, width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
       image(brick1, width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
+      fill(89, 89, 89);
       rectMode(CENTER);
+      noStroke();
+      rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
+      fill(120, 120, 120);
+      rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
+      stroke(255);
       if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
         cursor('pointer');
         noFill();
@@ -366,6 +390,22 @@ function draw() {
         rect(width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
         if(mouseIsPressed) {
           floortexture = brick1;
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          floortexture = 'concrete';
+        }
+      }
+      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
+        cursor('pointer');
+        noFill();
+        rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
+        if(mouseIsPressed) {
+          floortexture = 'lconcrete';
         }
       }
     }
@@ -472,6 +512,9 @@ function draw() {
           tool = 'wall';
         }
       }
+    }
+    if(tab == 'ground') {
+      
     }
   }
 }
