@@ -1,4 +1,4 @@
-let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
+let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, walltype, door, doorframe, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
 walls = [
 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -121,6 +121,8 @@ function preload() {
   dgrey = loadImage('darkgrey.png');
   lgrey = loadImage('lightgrey.png');
   jura = loadFont('Jura-Bold.ttf');
+  door = loadImage('door.png');
+  doorframe = loadImage('doorframe.png');
   floortextures = [brick1, bank, barn, house, bunker1, bunker2, dgrey, lgrey];
   wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b'];
 }
@@ -131,6 +133,7 @@ function setup() {
   tool = 'floor';
   floortexture = bunker1;
   wallcolour = '#ffffff';
+  walltype = 'wall';
 }
 imageButton = function(img, x, y, w, h, v, e, c) {
   rectMode(CORNER);
@@ -162,6 +165,12 @@ imageButton = function(img, x, y, w, h, v, e, c) {
         break;
         case 'tab':
         tab = e;
+        break;
+        case 'tool':
+        tool = e;
+        break;
+        case 'walltype':
+        walltype = e;
         break;
       }
     }
@@ -252,24 +261,57 @@ noFill();
 rectMode(CORNER);
   for(var y = 0; y < walls.length; y++) {
     for(var x = 0; x < walls[y].length; x++) {
-      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false) {
+      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'wall') {
         walls[y][x] = 2;
       }
-      if(walls[y][x] === 2) {
+      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'door') {
+        walls[y][x] = 3;
+      }
+      if(walls[y][x] == 3) {
+        var L = false, R = false, A = false, U = false;
+        if(walls[y][x - 1] == 2) {
+          L = true;
+        }
+        if(walls[y][x + 1] == 2) {
+          R = true;
+        }
+        if(walls[y+1][x] == 2) {
+          U = true;
+        }
+        if(walls[y-1][x] == 2) {
+          A = true;
+        }
+        translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
+        tint(wallcolour);
+        if(A == true && U == true || A == false && U == false && L == false && R == false) {
+          image(doorframe, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door, 0, 0, blockSize, blockSize);
+        }
+        else if(L == true && R == true) {
+          rotate(90);
+          image(doorframe, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door, 0, 0, blockSize, blockSize);
+          rotate(-90);
+        }
+        translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
+      }
+      if(walls[y][x] == 2) {
         if(floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === LEFT && menu == false) {
         walls[y][x] = 0;
       }
         var left = false, right = false, above = false, under = false;
-        if(walls[y][x - 1] === 2) {
+        if(walls[y][x - 1] >= 2) {
           left = true;
         }
-        if(walls[y][x + 1] === 2) {
+        if(walls[y][x + 1] >= 2) {
           right = true;
         }
-        if(walls[y+1][x] === 2) {
+        if(walls[y+1][x] >= 2) {
           under = true;
         }
-        if(walls[y-1][x] === 2) {
+        if(walls[y-1][x] >= 2) {
           above = true;
         }
         translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
@@ -420,6 +462,9 @@ rectMode(CORNER);
           rect(x + 1, y + 1, blockSize * 4 - 2, blockSize * 4 - 2);
         }
       }
+      image(doorframe, width / 2 - blockSize * 4, blockSize * 18, blockSize * 4, blockSize * 4);
+      imageButton(door, width / 2 - blockSize * 4, blockSize * 18, blockSize * 4, blockSize * 4, 'walltype', 'door', null);
+      imageButton(wall1, width / 2, blockSize * 18, blockSize * 4, blockSize * 4, 'walltype', 'wall', null);
     }
     if(tab == 'ground') {
       
