@@ -1,4 +1,4 @@
-let blockSize = 19, wallcolour, floortexture, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
+let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
 walls = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -60,7 +60,11 @@ function preload() {
   mansion = loadImage('pattern-mansion.png');
   bunker1 = loadImage('whitefloorbunker.png');
   bunker2 = loadImage('blackfloorbunker.png');
+  dgrey = loadImage('darkgrey.png');
+  lgrey = loadImage('lightgrey.png');
   jura = loadFont('Jura-Bold.ttf');
+  floortextures = [brick1, bank, barn, house, bunker1, bunker2, dgrey, lgrey];
+  wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b'];
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -69,6 +73,41 @@ function setup() {
   tool = 'floor';
   floortexture = bunker1;
   wallcolour = '#ffffff';
+}
+imageButton = function(img, x, y, w, h, v, e, c) {
+  rectMode(CORNER);
+  imageMode(CORNER);
+  if(img !== null) {
+    image(img, x, y, w, h);
+  }
+  noStroke();
+  if(c !==null) {
+    fill(c);
+    rect(x, y, w, h);
+  }
+  strokeWeight(1);
+  noFill();
+  stroke(255);
+  if(mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
+    cursor('pointer');
+    rect(x, y, w, h);
+    if(mouseIsPressed) {
+      switch(v) {
+        case 'wall':
+        wallcolour = e;
+        break;
+        case 'floor':
+        floortexture = e;
+        break;
+        case 'ground':
+        backgroundcolour = e;
+        break;
+        case 'tab':
+        tab = e;
+        break;
+      }
+    }
+  }
 }
 keyReleased = function() {
   if(key == 'm' && menu == false && menutimer > 0) {
@@ -98,37 +137,6 @@ function draw() {
   noFill();
   for(var i = 0; i < floors.length; i++) {
     for(var b = 0; b < floors[i].length; b++) {
-      if(floors[i][b] === 0 && mouseIsPressed && floor(mouseX / blockSize) === b && floor(mouseY / blockSize) === i && mouseButton === RIGHT && tool === 'floor' && menu == false) {
-        switch(floortexture) {
-          case bunker1:
-            floors[i][b] = 2;
-          break;
-          case bunker2:
-            floors[i][b] = 3;
-          break;
-          case mansion:
-            floors[i][b] = 4;
-          break;
-          case house:
-            floors[i][b] = 5;
-          break;
-          case barn:
-            floors[i][b] = 6;
-          break;
-          case bank:
-            floors[i][b] = 7;
-          break;
-          case brick1:
-            floors[i][b] = 8;
-          break;
-          case "concrete":
-            floors[i][b] = 9;
-          break;
-          case "lconcrete":
-            floors[i][b] = 10;
-          break;
-        }
-      }
     noStroke();
       rectMode(CENTER);
       if(floors[i][b] !== 0 && floors[i][b] !== 1) {
@@ -172,12 +180,10 @@ function draw() {
             image(brick1, 0, 0, blockSize, blockSize);
           break;
           case 9:
-            fill(89, 89, 89);
-            rect(0, 0, blockSize, blockSize);
+            image(dgrey, 0, 0, blockSize, blockSize);
           break;
           case 10:
-            fill(100, 100, 100);
-            rect(0, 0, blockSize, blockSize);
+            image(lgrey, 0, 0, blockSize, blockSize);
           break;
         }
         translate(-(b * blockSize + blockSize), -(i * blockSize + blockSize));
@@ -279,10 +285,10 @@ rectMode(CORNER);
   ellipse(mouseX + blockSize / 2, mouseY + blockSize / 2, blockSize / 2, blockSize / 2);
   }
   document.addEventListener("contextmenu", (event) => event.preventDefault());
-  if(key === 'a') {
+  if(key.toLowerCase() === 'a') {
     tool = 'wall';
   }
-  if(key === 's') {
+  if(key.toLowerCase() === 's') {
     tool = 'floor';
   }
   menutimer++;
@@ -322,194 +328,38 @@ rectMode(CORNER);
     if(tab == 'floor') {
       textSize(20);
       text("Floor textures", width / 2, blockSize * 6);
-      image(mansion, width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(house, width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(barn, width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(bank, width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(bunker1, width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(bunker2, width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-      image(brick1, width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
-      fill(89, 89, 89);
-      rectMode(CENTER);
-      noStroke();
-      rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
-      fill(120, 120, 120);
-      rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
-      stroke(255);
-      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = mansion;
+      for(let i = 0; i < floortextures.length; i++) {
+        let x = blockSize * 4 + i * (blockSize * 4), 
+        y = blockSize * 10;
+        if(x >= width - blockSize * 4) {
+          x -= floor(width / blockSize) * blockSize - (blockSize * 7);
+          y += blockSize * 4;
         }
-      }
-      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = house;
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = barn;
-        }
-      }
-      if(mouseX >= width / 2 && mouseX <= width / 2 + blockSize * 4 && mouseY >= blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = bank;
-        }
-      }
-      if(mouseX >= width / 2 + blockSize * 4 && mouseX <= width / 2 + blockSize * 8 && mouseY >= blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = bunker1;
-        }
-      }
-      if(mouseX >= width / 2 + blockSize * 8 && mouseX <= width / 2 + blockSize * 12 && mouseY >= blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = bunker2;
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = brick1;
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = 'concrete';
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          floortexture = 'lconcrete';
+        imageButton(floortextures[i], x, y, blockSize * 4, blockSize * 4, 'floor', floortextures[i], null);
+        if(floortexture == floortextures[i]) {
+          noFill();
+          stroke(0, 255, 0);
+          strokeWeight(4);
+          rect(x + 1, y + 1, blockSize * 4 - 2, blockSize * 4 - 2);
         }
       }
     }
     if(tab == 'wall') {
       textSize(20);
       text("Wall Colours", width / 2, blockSize * 6);
-      tint('#a18168');
-      image(wall1, width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#775529');
-      image(wall1, width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#a3977d');
-      image(wall1, width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#6d7645');
-      image(wall1, width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#233742');
-      image(wall1, width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#6c6c6b');
-      image(wall1, width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-      tint('#814100');
-      image(wall1, width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
-      tint('#42060b');
-      image(wall1, width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
-      noTint();
-      image(wall1, width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
-      rectMode(CENTER);
-      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#a18168';
-          tool = 'wall';
+      for(let i = 0; i < wallcolours.length; i++) {
+        let x = blockSize * 4 + i * (blockSize * 4), 
+        y = blockSize * 10;
+        if(x >= width - blockSize * 4) {
+          x -= floor(width / blockSize) * blockSize - (blockSize * 7);
+          y += blockSize * 4;
         }
-      }
-      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#775529';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#a3977d';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 && mouseX <= width / 2 + blockSize * 4 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 2, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#6d7645';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 + blockSize * 4 && mouseX <= width / 2 + blockSize * 8 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 6, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#233742';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 + blockSize * 8 && mouseX <= width / 2 + blockSize * 12 && mouseY > blockSize * 8 && mouseY <= blockSize * 12) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 + blockSize * 10, blockSize * 10, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#6c6c6b';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 12 && mouseX <= width / 2 - blockSize * 8 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 10, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#814100';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 8 && mouseX <= width / 2 - blockSize * 4 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 6, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#42060b';
-          tool = 'wall';
-        }
-      }
-      if(mouseX >= width / 2 - blockSize * 4 && mouseX <= width / 2 && mouseY > blockSize * 12 && mouseY <= blockSize * 16) {
-        cursor('pointer');
-        noFill();
-        rect(width / 2 - blockSize * 2, blockSize * 14, blockSize * 4, blockSize * 4);
-        if(mouseIsPressed) {
-          wallcolour = '#ffffff';
-          tool = 'wall';
+        imageButton(null, x, y, blockSize * 4, blockSize * 4, 'wall', wallcolours[i], wallcolours[i]);
+        if(wallcolour == wallcolours[i]) {
+          noFill();
+          stroke(0, 255, 0);
+          strokeWeight(4);
+          rect(x + 1, y + 1, blockSize * 4 - 2, blockSize * 4 - 2);
         }
       }
     }
@@ -517,4 +367,39 @@ rectMode(CORNER);
       
     }
   }
+  strokeWeight(1);
+  noStroke();
+  fill(255, 0, 0);
+  text(round(frameRate()), 20, 20);
+  if(floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseButton == RIGHT && tool == 'floor' && menu == false && mouseIsPressed) {
+        switch(floortexture) {
+          case bunker1:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 2;
+          break;
+          case bunker2:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 3;
+          break;
+          case mansion:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 4;
+          break;
+          case house:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 5;
+          break;
+          case barn:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 6;
+          break;
+          case bank:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 7;
+          break;
+          case brick1:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 8;
+          break;
+          case dgrey:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 9;
+          break;
+          case lgrey:
+            floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 10;
+          break;
+        }
+      }
 }
