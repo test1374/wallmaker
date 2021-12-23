@@ -1,4 +1,4 @@
-let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, walltype, door, doorframe, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
+let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, walltype, door, doorframe, door2, doorframe2, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
 walls = [
 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -123,6 +123,8 @@ function preload() {
   jura = loadFont('Jura-Bold.ttf');
   door = loadImage('door.png');
   doorframe = loadImage('doorframe.png');
+  door2 = loadImage('door2.png');
+  doorframe2 = loadImage('doorframe2.png');
   floortextures = [brick1, bank, barn, house, bunker1, bunker2, dgrey, lgrey];
   wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b'];
 }
@@ -261,12 +263,6 @@ noFill();
 rectMode(CORNER);
   for(var y = 0; y < walls.length; y++) {
     for(var x = 0; x < walls[y].length; x++) {
-      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'wall') {
-        walls[y][x] = 2;
-      }
-      if(walls[y][x] === 0 && floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'door') {
-        walls[y][x] = 3;
-      }
       if(walls[y][x] == 3) {
         var L = false, R = false, A = false, U = false;
         if(walls[y][x - 1] == 2) {
@@ -295,12 +291,59 @@ rectMode(CORNER);
           image(door, 0, 0, blockSize, blockSize);
           rotate(-90);
         }
+        else if(U == true && A == false && L == false && R == false) {
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+        }
+        else if(A == true && U == false && L == false && R == false) {
+          rotate(180);
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+          rotate(-180);
+        } 
+        else if(A == false && U == false && L == true && R == false) {
+          rotate(90);
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+          rotate(-90);
+        }
+        else if(U == false && A == false && L == false && R == true) {
+          rotate(270);
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+          rotate(-270);
+        }
+        else if(A == true && U == false && R == false && L == true) {
+          rotate(90);
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+          rotate(-90);
+        }
+        else if(A == true && U == false && R == true && L == false) {
+          rotate(270);
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+          rotate(-270);
+        }
+        else if(A == false && U == true && R == false && L == true) {
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+        }
+        else if(A == false && U == true && R == true && L == false) {
+          image(doorframe2, 0, 0, blockSize, blockSize);
+          noTint();
+          image(door2, 0, 0, blockSize, blockSize);
+        }
         translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
       }
       if(walls[y][x] == 2) {
-        if(floor(mouseX / blockSize) === x && floor(mouseY / blockSize) === y && mouseIsPressed && tool === 'wall' && mouseButton === LEFT && menu == false) {
-        walls[y][x] = 0;
-      }
         var left = false, right = false, above = false, under = false;
         if(walls[y][x - 1] >= 2) {
           left = true;
@@ -504,5 +547,14 @@ rectMode(CORNER);
             floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 10;
           break;
         }
+      }
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'wall') {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 2;
+      }
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'door') {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 3;
+      }
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] >= 2 && mouseIsPressed && tool === 'wall' && mouseButton === LEFT && menu == false && walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] >= 2) {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 0;
       }
 }
