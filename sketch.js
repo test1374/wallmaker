@@ -1,4 +1,4 @@
-let blockSize = 19, wallcolour, floortexture, wallcolours, floortextures, walltype, door, doorframe, door2, doorframe2, groundcolours, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' ,jura, menutimer = 0, menu = false, backgroundcolour,  
+let blockSize = 20, wallcolour, doorcolour, floortexture, wallcolours, floortextures, walltype, door, doorframe, door2, doorframe2, groundcolours, lines = true, dgrey, lgrey, wall1, wall2, wall3, wall4, brick1, tool, mansion, house, barn, bank, bunker1, bunker2, tab = 'floor' , underground = false, jura, menu = false, backgroundcolour,  
 walls = [],
 floors = [];
 function preload() {
@@ -22,14 +22,16 @@ function preload() {
   doorframe2 = loadImage('doorframe2.png');
   floortextures = [brick1, bank, barn, house, bunker1, bunker2, dgrey, lgrey];
   wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b'];
+  groundcolours = [['#80AF49', '#1B0D03'], ['#BDBDBD', '#1B0D03'], ['#DFA757', '#3D0D03'], ['#4E6128', '#1B0D03'], ['#8E832A', '#1B0D03'], ['#212404', '#120801'], ['#B4B02E', '#3D0D03'], ['#4D5A68', '#1B0D03'], ['#2F5737', '#1B0D03'], ['#58657E', '#1B0D03'], ['#2D385D', '#1B0D03'], ['#3d3d3d', '#1d0a02']];
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
   blockSize = 20;
-  backgroundcolour = '#80AF49';
+  backgroundcolour = 0;
   tool = 'floor';
   floortexture = bunker1;
   wallcolour = '#ffffff';
+  doorcolour = '#ffffff';
   walltype = 'wall';
   for(var y = 0; y < ceil(height / blockSize); y++) {
     for(var x = 0; x < floor(width / blockSize); x++) {
@@ -37,7 +39,7 @@ function setup() {
         walls.push([]);
         floors.push([]);
       }
-      walls[y].push(0);
+      walls[y].push([0, '#ffffff', '#ffffff']);
       floors[y].push(0);
     }
   }
@@ -49,7 +51,7 @@ imageButton = function(img, x, y, w, h, v, e, c) {
     image(img, x, y, w, h);
   }
   noStroke();
-  if(c !==null) {
+  if(c !== null) {
     fill(c);
     rect(x, y, w, h);
   }
@@ -79,31 +81,42 @@ imageButton = function(img, x, y, w, h, v, e, c) {
         case 'walltype':
         walltype = e;
         break;
+        case 'line':
+        lines = e;
+        break;
+        case 'above/below':
+        underground = e;
+        break;
       }
     }
   }
 }
 keyReleased = function() {
-  if(key == 'm' && menu == false && menutimer > 0) {
+  if(key == 'm' && menu == false) {
     menu = true;
-    menutimer = 0;
   }
-  if(key == 'm' && menu == true && menutimer > 0) {
+  else if(key == 'm' && menu == true) {
     menu = false;
-    menutimer = 0;
   }
 }
 function draw() {
   rectMode(CORNER);
   cursor('none');
-  background(backgroundcolour);
-  //background(20);
-  stroke(100);
-  for(var h = 0; h < width / blockSize * 4; h++) {
-    line(0, h * blockSize * 4, width, h * blockSize * 4)
+  if(underground == false) {
+    background(groundcolours[backgroundcolour][0]);
   }
-  for(var j = 0; j < height / blockSize * 4; j++) {
-    line(j * blockSize * 4, 0, j * blockSize * 4, height);
+  else {
+    background(groundcolours[backgroundcolour][1]);
+  }
+  //background(20);
+  stroke(0);
+  if(lines == true && underground == false) {
+    for(var h = 0; h < width / blockSize * 4; h++) {
+      line(0, h * blockSize * 4, width, h * blockSize * 4)
+    }
+    for(var j = 0; j < height / blockSize * 4; j++) {
+      line(j * blockSize * 4, 0, j * blockSize * 4, height);
+    }
   }
   imageMode(CENTER);
   angleMode(DEGREES);
@@ -168,102 +181,102 @@ noFill();
 rectMode(CORNER);
   for(var y = 0; y < walls.length; y++) {
     for(var x = 0; x < walls[y].length; x++) {
-      if(walls[y][x] == 3) {
+      if(walls[y][x][0] == 3) {
         var L = false, R = false, A = false, U = false;
-        if(walls[y][x - 1] == 2) {
+        if(walls[y][x - 1][0] == 2) {
           L = true;
         }
-        if(walls[y][x + 1] == 2) {
+        if(walls[y][x + 1][0] == 2) {
           R = true;
         }
-        if(walls[y+1][x] == 2) {
+        if(walls[y+1][x][0] == 2) {
           U = true;
         }
-        if(walls[y-1][x] == 2) {
+        if(walls[y-1][x][0] == 2) {
           A = true;
         }
         translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
-        tint(wallcolour);
+        tint(walls[y][x][1]);
         if(A == true && U == true || A == false && U == false && L == false && R == false) {
           image(doorframe, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door, 0, 0, blockSize, blockSize);
         }
         else if(L == true && R == true) {
           rotate(90);
           image(doorframe, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door, 0, 0, blockSize, blockSize);
           rotate(-90);
         }
         else if(U == true && A == false && L == false && R == false) {
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
         }
         else if(A == true && U == false && L == false && R == false) {
           rotate(180);
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
           rotate(-180);
         } 
         else if(A == false && U == false && L == true && R == false) {
           rotate(90);
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
           rotate(-90);
         }
         else if(U == false && A == false && L == false && R == true) {
           rotate(270);
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
           rotate(-270);
         }
         else if(A == true && U == false && R == false && L == true) {
           rotate(90);
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
           rotate(-90);
         }
         else if(A == true && U == false && R == true && L == false) {
           rotate(270);
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
           rotate(-270);
         }
         else if(A == false && U == true && R == false && L == true) {
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
         }
         else if(A == false && U == true && R == true && L == false) {
           image(doorframe2, 0, 0, blockSize, blockSize);
-          noTint();
+          tint(walls[y][x][2]);
           image(door2, 0, 0, blockSize, blockSize);
         }
         translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
       }
-      if(walls[y][x] == 2) {
+      if(walls[y][x][0] == 2) {
         var left = false, right = false, above = false, under = false;
-        if(walls[y][x - 1] >= 2) {
+        if(walls[y][x - 1][0] >= 2) {
           left = true;
         }
-        if(walls[y][x + 1] >= 2) {
+        if(walls[y][x + 1][0] >= 2) {
           right = true;
         }
-        if(walls[y+1][x] >= 2) {
+        if(walls[y+1][x][0] >= 2) {
           under = true;
         }
-        if(walls[y-1][x] >= 2) {
+        if(walls[y-1][x][0] >= 2) {
           above = true;
         }
         translate(x * blockSize + blockSize / 2, y * blockSize + blockSize / 2);
-        tint(wallcolour);
+        tint(walls[y][x][1]);
         if(above === true && under === true && left === true && right === true) {
           image(wall4, 0, 0, blockSize, blockSize);
         }
@@ -315,11 +328,24 @@ rectMode(CORNER);
           image(wall1, 0, 0, blockSize, blockSize);
         }
         translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
+        fill(0);
+        if(walls[y][x - 1][1] !== walls[y][x][1] && walls[y][x - 1][0] !== 0) {
+          rect(x * blockSize - blockSize / 40, y * blockSize + blockSize / 2.8, blockSize / 20, blockSize / 3.8);
+        }
+        if(walls[y - 1][x][1] !== walls[y][x][1] && walls[y - 1][x][0] !== 0) {
+          rect(x * blockSize + blockSize / 2.8, y * blockSize - blockSize / 40, blockSize / 3.8, blockSize / 20);
+        }
+        noFill();
       }
     }
   }
   noTint();
-  stroke(0);
+  if(underground == false) {
+    stroke(0);
+  }
+  else {
+    stroke(255);
+  }
   if(tool === 'wall' && menu == false) {
     rect(floor(mouseX / blockSize) * blockSize, floor(mouseY / blockSize) * blockSize, blockSize, blockSize);
     fill(255, 20, 20);
@@ -339,7 +365,7 @@ rectMode(CORNER);
   if(key.toLowerCase() === 's') {
     tool = 'floor';
   }
-  menutimer++;
+  noStroke();
   if(menu == true) {
     cursor('default');
     fill(0);
@@ -378,7 +404,7 @@ rectMode(CORNER);
       text("Floor textures", width / 2, blockSize * 6);
       for(let i = 0; i < floortextures.length; i++) {
         let x = blockSize * 4 + i * (blockSize * 4), 
-        y = blockSize * 10;
+        y = blockSize * 7;
         if(x >= width - blockSize * 4) {
           x -= floor(width / blockSize) * blockSize - (blockSize * 7);
           y += blockSize * 4;
@@ -397,7 +423,7 @@ rectMode(CORNER);
       text("Wall Colours", width / 2, blockSize * 6);
       for(let i = 0; i < wallcolours.length; i++) {
         let x = blockSize * 4 + i * (blockSize * 4), 
-        y = blockSize * 10;
+        y = blockSize * 7;
         if(x >= width - blockSize * 4) {
           x -= floor(width / blockSize) * blockSize - (blockSize * 7);
           y += blockSize * 4;
@@ -410,12 +436,42 @@ rectMode(CORNER);
           rect(x + 1, y + 1, blockSize * 4 - 2, blockSize * 4 - 2);
         }
       }
+      fill(0);
+      stroke(255);
+      strokeWeight(2);
+      text("Select door or walls", width / 2, blockSize * 17);
       image(doorframe, width / 2 - blockSize * 4, blockSize * 18, blockSize * 4, blockSize * 4);
       imageButton(door, width / 2 - blockSize * 4, blockSize * 18, blockSize * 4, blockSize * 4, 'walltype', 'door', null);
       imageButton(wall1, width / 2, blockSize * 18, blockSize * 4, blockSize * 4, 'walltype', 'wall', null);
     }
     if(tab == 'ground') {
-      
+      textSize(20);
+      text("Ground Colours", width / 2, blockSize * 6);
+      for(let i = 0; i < groundcolours.length; i++) {
+        let x = blockSize * 4 + i * (blockSize * 4), 
+        y = blockSize * 7;
+        if(x >= width - blockSize * 4) {
+          x -= floor(width / blockSize) * blockSize - (blockSize * 7);
+          y += blockSize * 4;
+        }
+        if(x >= width - blockSize * 4) {
+          x -= floor(width / blockSize) * blockSize - (blockSize * 7);
+          y += blockSize * 4;
+        }
+        imageButton(null, x, y, blockSize * 4, blockSize * 4, 'ground', i, groundcolours[i][0]);
+        if(backgroundcolour == i) {
+          noFill();
+          stroke(0, 255, 0);
+          strokeWeight(4);
+          rect(x + 1, y + 1, blockSize * 4 - 2, blockSize * 4 - 2);
+        }
+      }
+      fill(0);
+      stroke(255);
+      strokeWeight(2);
+      text("Above or below ground", width / 2, blockSize * 17);
+        imageButton(null, width / 2 - blockSize * 4, blockSize * 18, blockSize * 4, blockSize * 4, 'above/below', false, groundcolours[backgroundcolour][0]);
+      imageButton(null, width / 2, blockSize * 18, blockSize * 4, blockSize * 4, 'above/below', true, groundcolours[backgroundcolour][1]);
     }
   }
   strokeWeight(1);
@@ -454,14 +510,14 @@ rectMode(CORNER);
           break;
         }
       }
-      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'wall') {
-        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 2;
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)][0] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'wall') {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = [2, wallcolour];
       }
-      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'door') {
-        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 3;
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)][0] === 0 && mouseIsPressed && tool === 'wall' && mouseButton === RIGHT && menu == false && walltype == 'door') {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = [3, wallcolour, doorcolour];
       }
-      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] >= 2 && mouseIsPressed && tool === 'wall' && mouseButton === LEFT && menu == false && walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] >= 2) {
-        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)] = 0;
+      if(walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)][0] >= 2 && mouseIsPressed && tool === 'wall' && mouseButton === LEFT && menu == false && walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)][0] >= 2) {
+        walls[floor(mouseY / blockSize)][floor(mouseX / blockSize)][0] = 0;
       }
   }
 }
