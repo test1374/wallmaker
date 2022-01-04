@@ -478,7 +478,7 @@ rectMode(CORNER);
   noStroke();
   fill(255, 0, 0);
   text(round(frameRate()), 20, 20);
-  if(floor(mouseX / blockSize) < floor(width / blockSize) - 1 && floor(mouseY / blockSize) < ceil(height / blockSize) - 1 && floor(mouseX / blockSize) !== 0 && floor(mouseY / blockSize) !== 0) {
+  if(floor(mouseX / blockSize) < floor(width / blockSize) - 1 && floor(mouseY / blockSize) < ceil(height / blockSize) - 1 && floor(mouseX / blockSize) !== 0 && floor(mouseY / blockSize) !== 0 && floor(mouseY / blockSize) > 0) {
   if(floors[floor(mouseY / blockSize)][floor(mouseX / blockSize)] === 0 && mouseButton == RIGHT && tool == 'floor' && menu == false && mouseIsPressed) {
         switch(floortexture) {
           case bunker1:
