@@ -19,9 +19,9 @@ function preload() {
   door2 = loadImage('door2.png');
   doorframe2 = loadImage('doorframe2.png');
   floortextures = [brick1, bank, barn, house, bunker1, bunker2, dgrey, lgrey];
-  wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b', '#483737ff'];
+  wallcolours = ['#ffffff', '#a18168', '#775529', '#a3977d', '#6d7645', '#233742', '#6c6c6b', '#814100', '#42060b', '#483737ff', '#119099'];
   groundcolours = [['#80AF49', '#1B0D03'], ['#BDBDBD', '#1B0D03'], ['#DFA757', '#3D0D03'], ['#4E6128', '#1B0D03'], ['#8E832A', '#1B0D03'], ['#212404', '#120801'], ['#B4B02E', '#3D0D03'], ['#4D5A68', '#1B0D03'], ['#2F5737', '#1B0D03'], ['#58657E', '#1B0D03'], ['#2D385D', '#1B0D03'], ['#3d3d3d', '#1d0a02']];
-  doorcolours = ['#ffffff', '#4b4b4b', '#eff542', '#0e1466', '#CC9966'];
+  doorcolours = ['#ffffff', '#4b4b4b', '#eff542', '#0e1466', '#CC9966', '#332211', '#119099'];
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -114,7 +114,7 @@ function draw() {
     background(groundcolours[backgroundcolour][1]);
   }
   //background(20);
-  stroke(0);
+  stroke(0, 0, 0, 100);
   if(lines == true && underground == false) {
     for(var h = 0; h < width / blockSize * 4; h++) {
       line(0, h * blockSize * 4, width, h * blockSize * 4)
@@ -276,7 +276,7 @@ rectMode(CORNER);
         }
         translate(-(x * blockSize + blockSize / 2), -(y * blockSize + blockSize / 2));
       }
-      if(walls[y][x][0] == 2) {
+      else if(walls[y][x][0] == 2) {
         var left = false, right = false, above = false, under = false;
         if(walls[y][x - 1][0] >= 2) {
           left = true;
